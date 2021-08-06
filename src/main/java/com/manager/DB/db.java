@@ -1,14 +1,11 @@
 package com.manager.DB;
 
-import java.util.Iterator;
-
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 public class db {
     public boolean add(String key, String value){
@@ -34,14 +31,10 @@ public class db {
             MongoDatabase database = client.getDatabase("test");
             MongoCollection<Document> doc = database.getCollection("testing");
 
-            FindIterable<Document> iterDoc = doc.find();
-            int i = 1;
-            // Getting the iterator
-            Iterator it = iterDoc.iterator();
-            while (it.hasNext()) {
-                System.out.println(it.next());
-                i++;
-		    }
+            for (Document d : doc.find()) {
+                System.out.println(d.toJson());
+                
+            }
             return true;
         } catch (Exception e) {
             System.out.println("ERROR Occured Retreiving Data..");
@@ -49,22 +42,19 @@ public class db {
         }
     }
 
-    public boolean deleteAll() {
+    public boolean delete(String key) {
         try {
             MongoClient client = MongoClients.create("mongodb://localhost:27017");
             MongoDatabase database = client.getDatabase("test");
             MongoCollection<Document> doc = database.getCollection("testing");
 
-            FindIterable<Document> iterDoc = doc.find();
-            int i = 1;
-            // Getting the iterator
-            Iterator it = iterDoc.iterator();
-            while (it.hasNext()) {
-                doc.deleteOne((Bson) it);
-		    }
+            for(Document d : doc.find()){
+                doc.deleteOne(Filters.eq("key", key));
+                d.toJson();
+            }
             return true;
         } catch (Exception e) {
-            System.out.println("ERROR Occured Deleting Data..");
+            System.out.println("ERROR Occured Deleting Data..\nPlease Enter correct key");
             return false;
         }
     }
