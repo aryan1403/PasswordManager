@@ -11,7 +11,7 @@ public class manager {
     public void menu() {
         System.out.println("1. Set a new Entity");
         System.out.println("2. Get all the available Entities");
-        System.out.println("3. Delete All");
+        System.out.println("3. Delete Entity");
         System.out.println("5. Exit");
         System.out.print("Enter your Choice : ");
     }
@@ -40,9 +40,12 @@ public class manager {
         System.exit(0);
     }
 
-    public void deleteAll(){
-        if(new db().deleteAll()) 
-            System.out.println("Cleared DataBase Successfully!");
+    public void deleteAll() {
+        get();
+        System.out.print("Enter the key from any Doc listed above : ");
+        String key = sc3.nextLine();
+        if(new db().delete(key)) 
+            System.out.println("Deleted Document Succesfully");
     }
 
     public void start() {
